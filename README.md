@@ -42,3 +42,6 @@ With following content:
   "debug": false,
   "nextmapinstate": true
 }
+
+
+After getting npm Packages replace node-rcon.js with ./node_modules/node-rcon/node-rcon.js
