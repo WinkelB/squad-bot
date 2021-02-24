@@ -196,6 +196,23 @@ DiscordClient.on("ready", () => {
       );
       message.react("✅");
     } else if (
+      command == "credits" &&
+      message.author.id == secrets.discorddeveloperuserid
+    ) {
+      seedingmessage();
+
+      /*
+        const embed = {
+            "description": "Developer: Bjoerek\nSupporters: Sklz(RegexGod), Jeremy, Rawfoss, Delta\nDependencies:discordjs, node-nodeschedule, csv-load-sync, csvwriter, fs, node-rcon(modified), gamedig",
+            "color": 65339, //green
+            "timestamp": new Date().toISOString(),
+            "author": {
+                "name": secrets.servernameshort+"-Bot Credits"
+            }
+        };
+        message.channel.send({ embed });
+        */
+    } else if (
       command == "purge" &&
       message.author.id == secrets.discorddeveloperuserid
     ) {
@@ -220,8 +237,7 @@ DiscordClient.on("ready", () => {
     } else if (
       command == "mutelist" &&
       ((message.member._roles.includes(secrets.discordserveradminroleid) &&
-        (message.channel.id == secrets.discordcontrolchannelid ||
-          message.channel.id == secrets.discordreportchannelid)) ||
+        (message.channel.id == secrets.discordcontrolchannelid || message.channel.id == secrets.discordreportchannelid)) ||
         message.channel.id == secrets.discorddebugchannelid)
     ) {
       const fs = require("fs");
@@ -757,7 +773,7 @@ function mapvote() {
                 " | Timestamp: " +
                 Date.now()
             );
-            rconsend("AdminSetNextMap " + nextmap);
+            rconsend("Adminsetnextlayer " + nextmap);
             global.mapvotemode = false;
             const embed = {
               color: 12118406,
@@ -947,7 +963,7 @@ rcon
     debug("[rcon][receive]=> " + str);
     //Answer of the GetNextMap Command sended via the Interval
     var CurrentMapanswerRegexp = new RegExp(
-      "Current map is (?<FullCurrentMap>(?<CurrentDLC>([CAF]*)[_]?)(?<CurrentMap>.+)[_, ](?<CurrentMode>AAS|RAAS|TC|Destruction|Invasion|Skirmish|Tanks)[_, ](?<CurrentVersion>[v,V]\\d( Night)*)), Next map is (?<FullNextMap>(?<NextDLC>([CAF]*)[_]?)(?<Nextmap>.*)[_, ](?<NextMode>AAS|RAAS|TC|Destruction|Invasion|Skirmish|Tanks)[_, ](?<NextVersion>[v,V]\\d( Night)*))*"
+      "Current map is (?<FullCurrentMap>(?<CurrentDLC>([CAF]*?)[_]?)(?<CurrentMap>.+)[_, ](?<CurrentMode>AAS|RAAS|TC|Destruction|Invasion|Skirmish|Tanks)[_, ](?<CurrentVersion>[v,V]\\d( Night)*)), Next map is (?<FullNextMap>(?<NextDLC>([CAF]*?)[_]?)(?<Nextmap>.*)[_, ](?<NextMode>AAS|RAAS|TC|Destruction|Invasion|Skirmish|Tanks)[_, ](?<NextVersion>[v,V]\\d( Night)*))*"
     );
     var CurrentMapMatch = CurrentMapanswerRegexp.exec(str);
     if (CurrentMapMatch) {
@@ -1098,7 +1114,7 @@ rcon
         var ReportMessage = Commandmatch.groups.ReportMessage;
         debug("[rcon][chat][Formatter]Command : " + command);
         debug("[rcon][chat][Formatter]ReportMessage : " + ReportMessage);
-        if (command == "admin" || command == "report") {
+        if ((command == "admin" || command == "report") && global.admincall == true) {
           //Create Embedded Discord Message
           const embed = {
             description: ReportMessage,
